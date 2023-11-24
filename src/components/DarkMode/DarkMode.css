@@ -1,6 +1,11 @@
+/* .dark_mode_container{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+} */
 .dark_mode {
-    margin-top: -20px;
-    margin-left: 10px;
+    margin-top: 1px;
+    margin-left: -360px;
 }
 
 .dark_mode_label {
