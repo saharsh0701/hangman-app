@@ -18,6 +18,7 @@ function App() {
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [clickedLetters, setClickedLetters] = useState(new Set());
 
   useEffect(() => {
     const handleKeydown = event => {
@@ -47,13 +48,65 @@ function App() {
   function playAgain() {
     setPlayable(true);
 
-    // Empty Arrays
+    // Empty Arrays 
     setCorrectLetters([]);
     setWrongLetters([]);
+    setClickedLetters(new Set());
 
     const random = Math.floor(Math.random() * words.length);
     selectedWord = words[random];
   }
+
+  const handleLetterClick = (letter) => {
+    console.log(`Clicked letter: ${letter}`);
+    if (playable) {
+      if (selectedWord.includes(letter)) {
+        if (!correctLetters.includes(letter)) {
+          setCorrectLetters((currentLetters) => [...currentLetters, letter]);
+        } else {
+          show(setShowNotification);
+        }
+      } else {
+        if (!wrongLetters.includes(letter)) {
+          setWrongLetters((currentLetters) => [...currentLetters, letter]);
+        } else {
+          show(setShowNotification);
+        }
+      }
+    }
+    setClickedLetters((prevClickedLetters) => new Set([...prevClickedLetters, letter]));
+  };
+  const generateAlphabetButtons = () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const firstRow = Array.from(alphabet.slice(0, 13));
+    const secondRow = Array.from(alphabet.slice(13));
+
+    const generateButtons = (letters) =>
+      letters.map((letter) => (
+        <button
+          key={letter}
+          onClick={() => handleLetterClick(letter)}
+          disabled={
+            clickedLetters.has(letter) ||
+            correctLetters.includes(letter) ||
+            wrongLetters.includes(letter)
+          }
+        >
+          {letter}
+        </button>
+      ));
+
+    return (
+      <div className="alphabet-buttons">
+        <div className="button-row">
+          {generateButtons(firstRow)}
+        </div>
+        <div className="button-row">
+          {generateButtons(secondRow)}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -66,6 +119,9 @@ function App() {
       </div>
       <Popup correctLetters={correctLetters} wrongLetters={wrongLetters} selectedWord={selectedWord} setPlayable={setPlayable} playAgain={playAgain} />
       <Notification showNotification={showNotification} />
+      <div className="alphabet-buttons">
+        {generateAlphabetButtons()}
+      </div>
     </>
   );
 }
