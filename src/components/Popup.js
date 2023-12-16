@@ -11,7 +11,7 @@ const Popup = ({correctLetters, wrongLetters, selectedWord, setPlayable, playAga
     playable = false;
   } else if( checkWin(correctLetters, wrongLetters, selectedWord) === 'lose' ) {
     finalMessage = 'you lost. ';
-    finalMessageRevealWord = `...the word was: ${selectedWord}`;
+    finalMessageRevealWord = `The word was: ${selectedWord}`;
     playable = false;
   }
 
